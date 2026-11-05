@@ -1,8 +1,9 @@
 # 📍 Live Location Tracker
 
-A lightweight, dependency-free web page that shows your device's live location
+A lightweight web page (no build step) that shows your device's live location
 (latitude, longitude and accuracy) and a one-click Google Maps link. It uses the
-browser's Geolocation API and runs entirely in your browser — no server, no database.
+browser's Geolocation API, and users sign in with Firebase Authentication
+(email and password). Your location never leaves the browser.
 
 ## 🚀 Run It
 
@@ -18,18 +19,31 @@ It's a static site, so there's nothing to build or install.
 
 > Browsers only allow location access on HTTPS pages or `localhost`.
 
+## 🔑 Firebase Setup (for login)
+
+Sign-in uses the Firebase project configured in `firebase.js`. In the
+[Firebase console](https://console.firebase.google.com/) for that project:
+
+1. Go to **Authentication → Sign-in method** and enable **Email/Password**.
+2. Go to **Authentication → Settings → Authorized domains** and add the domain
+   you host the site on (`localhost` is allowed by default).
+
+To use a different Firebase project, replace the config object in `firebase.js`
+with the one from **Project settings → Your apps**.
+
 ---
 
 ## 🛠 How to Use
 
 1. Open the live link on any browser
-2. Click **“Share Location”**
-3. Allow location access when prompted
-4. Your current location will appear and keep updating with:
+2. Log in, or click **“Sign up”** to create an account
+3. Click **“Share Location”**
+4. Allow location access when prompted
+5. Your current location will appear and keep updating with:
    - Latitude & Longitude
    - Accuracy in meters
    - Google Maps redirection link
-5. Click **“Stop Sharing”** to stop tracking at any time
+6. Click **“Stop Sharing”** to stop tracking at any time, or **“Sign out”** when you're done
 
 ---
 
