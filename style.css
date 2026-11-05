@@ -23,3 +23,33 @@ a {
   margin-top: 10px;
   color: #007BFF;
 }
+
+a[hidden] {
+  display: none;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+button {
+  font-size: 16px;
+  padding: 10px 18px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 6px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #9ec9f5;
+  cursor: not-allowed;
+}
+
+.note {
+  font-size: 13px;
+  color: #666;
+  margin-top: 20px;
+}
