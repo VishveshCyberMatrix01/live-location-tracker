@@ -1,48 +1,71 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyC9WhKMPzVQWzwAs-1zVhJl0G-Dtz7UOL8",
-  authDomain: "livelocationtracker-15014.firebaseapp.com",
-  databaseURL: "https://livelocationtracker-15014-default-rtdb.firebaseio.com",
-  projectId: "livelocationtracker-15014",
-  storageBucket: "livelocationtracker-15014.firebasestorage.app",
-  messagingSenderId: "707582072085",
-  appId: "1:707582072085:web:afdafad4e49b3e2a3ec51c"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-
-const status = document.getElementById("status");
+const statusEl = document.getElementById("status");
 const locationDisplay = document.getElementById("location");
 const mapLink = document.getElementById("mapLink");
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+
+let watchId = null;
+
+function setTracking(active) {
+  startBtn.disabled = active;
+  stopBtn.disabled = !active;
+}
 
 function updateLocation(position) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  const accuracy = position.coords.accuracy;
+  const { latitude, longitude, accuracy } = position.coords;
 
-  locationDisplay.textContent = `Latitude: ${latitude}, Longitude: ${longitude}, Accuracy: ±${accuracy}m`;
+  locationDisplay.textContent =
+    `Latitude: ${latitude.toFixed(6)}, Longitude: ${longitude.toFixed(6)}, Accuracy: ±${Math.round(accuracy)}m`;
   mapLink.href = `https://www.google.com/maps?q=${latitude},${longitude}`;
-  mapLink.textContent = "View on Google Maps";
-  status.textContent = "Live location updated!";
+  mapLink.hidden = false;
+  statusEl.textContent = `Live location updated at ${new Date(position.timestamp).toLocaleTimeString()}`;
 }
 
 function handleError(error) {
-  status.textContent = "Error getting location: " + error.message;
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      stopTracking();
+      statusEl.textContent = "Location permission was denied. Allow it in your browser settings and try again.";
+      break;
+    case error.POSITION_UNAVAILABLE:
+      statusEl.textContent = "Location is currently unavailable. Still trying...";
+      break;
+    case error.TIMEOUT:
+      // watchPosition keeps retrying after a timeout, so keep the last good fix on screen.
+      statusEl.textContent = "Waiting for a GPS fix...";
+      break;
+    default:
+      statusEl.textContent = "Error getting location: " + error.message;
+  }
 }
 
-if ("geolocation" in navigator) {
-  navigator.geolocation.watchPosition(updateLocation, handleError, {
+function startTracking() {
+  if (!("geolocation" in navigator)) {
+    statusEl.textContent = "Geolocation is not supported by your browser.";
+    return;
+  }
+  if (!window.isSecureContext) {
+    statusEl.textContent = "Location needs a secure page. Open this site over HTTPS or on localhost.";
+    return;
+  }
+
+  statusEl.textContent = "Requesting your location...";
+  setTracking(true);
+  watchId = navigator.geolocation.watchPosition(updateLocation, handleError, {
     enableHighAccuracy: true,
     maximumAge: 0,
-    timeout: 5000
+    timeout: 15000
   });
-} else {
-  status.textContent = "Geolocation is not supported by your browser.";
 }
+
+function stopTracking() {
+  if (watchId !== null) {
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  }
+  setTracking(false);
+  statusEl.textContent = "Location sharing stopped.";
+}
+
+startBtn.addEventListener("click", startTracking);
+stopBtn.addEventListener("click", stopTracking);

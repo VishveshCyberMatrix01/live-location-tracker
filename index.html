@@ -9,9 +9,14 @@
 <body>
   <div class="container">
     <h1>Live Location Tracker</h1>
-    <p id="status">Waiting for location updates...</p>
+    <p id="status">Click “Share Location” to start.</p>
     <p id="location"></p>
-    <a id="mapLink" target="_blank">Google Maps Link</a>
+    <a id="mapLink" target="_blank" rel="noopener noreferrer" hidden>View on Google Maps</a>
+    <div class="actions">
+      <button id="startBtn" type="button">Share Location</button>
+      <button id="stopBtn" type="button" disabled>Stop Sharing</button>
+    </div>
+    <p class="note">Your location stays in this browser tab. Nothing is sent to a server.</p>
   </div>
   <script src="script.js"></script>
 </body>
