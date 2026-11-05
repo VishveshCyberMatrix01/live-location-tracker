@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log In · Live Location Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container auth-card">
+    <h1>Live Location Tracker</h1>
+    <h2 id="formTitle">Log in</h2>
+
+    <form id="authForm" novalidate>
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" required />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" minlength="6" required />
+
+      <p id="message" class="message" role="alert" hidden></p>
+
+      <button id="submitBtn" type="submit">Log in</button>
+    </form>
+
+    <button id="resetBtn" type="button" class="link-button">Forgot password?</button>
+    <p class="switch">
+      <span id="switchText">Don't have an account?</span>
+      <button id="switchBtn" type="button" class="link-button">Sign up</button>
+    </p>
+  </div>
+  <script type="module" src="login.js"></script>
+</body>
+</html>

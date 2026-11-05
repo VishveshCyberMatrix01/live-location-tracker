@@ -7,7 +7,11 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="app" hidden>
+    <div class="user-bar">
+      <span>Signed in as <strong id="userEmail"></strong></span>
+      <button id="signOutBtn" type="button" class="link-button">Sign out</button>
+    </div>
     <h1>Live Location Tracker</h1>
     <p id="status">Click “Share Location” to start.</p>
     <p id="location"></p>
@@ -16,8 +20,9 @@
       <button id="startBtn" type="button">Share Location</button>
       <button id="stopBtn" type="button" disabled>Stop Sharing</button>
     </div>
-    <p class="note">Your location stays in this browser tab. Nothing is sent to a server.</p>
+    <p class="note">Your location stays in this browser tab. It is never sent to a server.</p>
   </div>
   <script src="script.js"></script>
+  <script type="module" src="auth-guard.js"></script>
 </body>
 </html>
